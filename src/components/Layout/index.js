@@ -3,11 +3,9 @@ import { connect } from 'react-redux';
 import { 
   Pane, 
   Button, 
-  Text, 
   Heading, 
   Icon, 
   Pill, 
-  Card,
   Image,
   Paragraph,
   SideSheet
@@ -35,8 +33,15 @@ const Layout = ({ children, cart }) => {
             appearance="minimal"
             onClick={() => setIsShownCart(true)}
           >
-            <Icon icon="shopping-cart" size={16} />
-            <Pill display="inline-flex" margin={8}>{cart.length}</Pill>
+            <Icon icon="shopping-cart" color="neutral" size={16} />
+            <Pill 
+              display="inline-flex" 
+              margin={8}
+              color="green"
+              isSolid
+            >
+              {cart.length}
+            </Pill>
           </Button>
 
           <Button marginRight={16} appearance="minimal">
@@ -49,7 +54,9 @@ const Layout = ({ children, cart }) => {
         </Pane>
       </Pane>
 
-      {children}
+      <Pane flex={1} display="flex" padding={16} flexDirection="column">
+        {children}
+      </Pane>
 
       <SideSheet
         isShown={isShownCart}
