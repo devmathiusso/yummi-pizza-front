@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { addPizzaToCart } from '../../actions/cart';
 import { Dialog, Pane, Text, Heading, TextareaField } from 'evergreen-ui';
 
 import Header from './Header';
 import Footer from './Footer';
 
-const PizzaDialog = ({ selectedPizza, closeDialog }) => {
+const PizzaDialog = ({ 
+  selectedPizza, 
+  closeDialog, 
+  openSuccessDialog, 
+  closePizzaDialog, 
+  addPizzaToCart
+}) => {
+  const [preferences, setPreferences] = useState('');
+
   if (!selectedPizza) {
     return null;
+  }
+
+  const addPizzaToCartFn = qty => {
+    addPizzaToCart(selectedPizza, qty, preferences);
+    openSuccessDialog();
+    closePizzaDialog();
+    setPreferences('');
   }
 
   return (
@@ -27,6 +44,7 @@ const PizzaDialog = ({ selectedPizza, closeDialog }) => {
         footer={
           <Footer 
             pizzaPrice={selectedPizza.price}
+            addPizzaToCart={addPizzaToCartFn}
           />
         }
       >
@@ -62,9 +80,12 @@ const PizzaDialog = ({ selectedPizza, closeDialog }) => {
             </Pane>
 
             <TextareaField
+              label=""
               hint="e.g. allergies, extra spicy, etc."
               inputHeight={120}
               style={{ resize: 'none' }}
+              defaultValue={preferences}
+              onChange={e => setPreferences(e.target.value)}
             />
           </Pane>
 
@@ -74,4 +95,10 @@ const PizzaDialog = ({ selectedPizza, closeDialog }) => {
   )
 }
 
-export default PizzaDialog;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  addPizzaToCart: (pizza, qty, preferences) => dispatch(addPizzaToCart(pizza, qty, preferences))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PizzaDialog);

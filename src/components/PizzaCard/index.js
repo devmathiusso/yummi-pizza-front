@@ -11,11 +11,13 @@ const PizzaCard = ({ pizza, openPizzaDialog }) => {
       display="flex" 
       flexDirection="row" 
       width={400} 
-      height={140}
+      height={170}
       marginBottom={20}
-      hoverElevation={1}
+      hoverElevation={2}
       style={{ cursor: 'pointer' }}
       onClick={() => openPizzaDialog(pizza)}
+      border="default"
+      flex="0 0 30%"
     >
       <Pane 
         padding={16}

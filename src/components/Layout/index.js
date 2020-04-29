@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import { changeIsCartOpen } from '../../actions/cart';
 import { 
   Pane, 
   Button, 
   Heading, 
   Icon, 
   Pill, 
-  Image,
-  Paragraph,
-  SideSheet
+  Image
 } from 'evergreen-ui';
 import logo from '../../logo.svg';
 
-const Layout = ({ children, cart }) => {
-  const [isShownCart, setIsShownCart] = useState(false);
+import CartSideSheet from '../CartSideSheet';
+
+const Layout = ({ children, cart, changeIsCartOpen }) => {
+  const changeCartOpen = isCartOpen => {
+    changeIsCartOpen(isCartOpen);
+  }
 
   return (
     <>
@@ -31,7 +34,7 @@ const Layout = ({ children, cart }) => {
           <Button 
             marginRight={12} 
             appearance="minimal"
-            onClick={() => setIsShownCart(true)}
+            onClick={() => changeCartOpen(true)}
           >
             <Icon icon="shopping-cart" color="neutral" size={16} />
             <Pill 
@@ -40,7 +43,7 @@ const Layout = ({ children, cart }) => {
               color="green"
               isSolid
             >
-              {cart.length}
+              {cart.items.length}
             </Pill>
           </Button>
 
@@ -58,12 +61,11 @@ const Layout = ({ children, cart }) => {
         {children}
       </Pane>
 
-      <SideSheet
-        isShown={isShownCart}
-        onCloseComplete={() => setIsShownCart(false)}
-      >
-        <Paragraph margin={40}>Cart Items</Paragraph>
-      </SideSheet>
+      <CartSideSheet 
+        cartItems={cart.items} 
+        isCartOpen={cart.isCartOpen}
+        changeCartOpen={changeCartOpen}
+      />
     </>
   )
 }
@@ -72,4 +74,8 @@ const mapStateToProps = (state) => ({
   cart: state.cart
 });
 
-export default connect(mapStateToProps)(Layout);
+const mapDispatchToProps = (dispatch) => ({
+  changeIsCartOpen: isCartOpen => dispatch(changeIsCartOpen(isCartOpen))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

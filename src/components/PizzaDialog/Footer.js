@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pane, Text, Button, AddIcon, RemoveIcon, TextInput } from 'evergreen-ui';
 
-const Footer = ({ pizzaPrice }) => {
+const Footer = ({ pizzaPrice, addPizzaToCart }) => {
   const [qty, setQty] = useState(1);
 
   const addQty = () => setQty(qty + 1);
@@ -35,7 +35,11 @@ const Footer = ({ pizzaPrice }) => {
       </Pane>
 
       <Pane display="flex" alignItems="center">
-        <Button height={40} appearance="primary" intent="primary">
+        <Button 
+          height={40} 
+          appearance="primary"
+          onClick={() => addPizzaToCart(qty)}
+        >
           Add to cart
         </Button>
       </Pane>
