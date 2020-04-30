@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { changeIsCartOpen } from '../actions/cart';
-import { CornerDialog, Pane } from 'evergreen-ui';
+import { changeIsCartOpen, toggleOrderSuccessDialog } from '../actions/cart';
+import { CornerDialog, Dialog, Pane } from 'evergreen-ui';
 
 import api from '../api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PizzaCard from '../components/PizzaCard';
 import PizzaDialog from '../components/PizzaDialog';
 
-const Home = ({ changeIsCartOpen, isCartOpen }) => {
+const Home = ({ 
+  changeIsCartOpen, 
+  isCartOpen, 
+  orderSuccessDialog, 
+  toggleOrderSuccessDialog
+}) => {
   const [pizzas, setPizzas] = useState([]);
   const [selectedPizza, selectPizza] = useState(null);
   const [shownSuccessDialog, setShownSuccessDialog] = useState(false);
@@ -75,16 +80,30 @@ const Home = ({ changeIsCartOpen, isCartOpen }) => {
       >
         You can keep ordering or go directly to your cart
       </CornerDialog>
+
+      <Dialog
+        isShown={orderSuccessDialog}
+        title="Order Sent Successfully!"
+        intent="success"
+        onCloseComplete={() => toggleOrderSuccessDialog()}
+        confirmLabel="Yummi!"
+        hasCancel={false}
+      >
+        We are preparing your delicious pizzas!
+      </Dialog>
+
     </>
   )
 }
 
 const mapStateToProps = (state) => ({
-  isCartOpen: state.cart.isCartOpen
+  isCartOpen: state.cart.isCartOpen,
+  orderSuccessDialog: state.cart.orderSuccessDialog
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeIsCartOpen: isCartOpen => dispatch(changeIsCartOpen(isCartOpen))
+  changeIsCartOpen: isCartOpen => dispatch(changeIsCartOpen(isCartOpen)),
+  toggleOrderSuccessDialog: () => dispatch(toggleOrderSuccessDialog())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

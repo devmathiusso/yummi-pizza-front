@@ -47,11 +47,7 @@ const Layout = ({ children, cart, changeIsCartOpen }) => {
             </Pill>
           </Button>
 
-          <Button marginRight={16} appearance="minimal">
-            Sign Up
-          </Button>
-
-          <Button appearance="primary">
+          <Button appearance="minimal" intent="primary">
             Sign In
           </Button>
         </Pane>

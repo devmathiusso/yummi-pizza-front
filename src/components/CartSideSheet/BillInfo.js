@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { setPaymentMethod } from '../../actions/cart';
 import { Pane, Text, Strong, RadioGroup } from 'evergreen-ui';
 
 import api from '../../api';
 
-const BillInfo = ({ totalCart, deliveryCost }) => {
+const BillInfo = ({ totalCart, deliveryCost, paymentMethod, setPaymentMethod }) => {
   const [paymentMethods, setPaymentMethods] = useState([]);
-  const [paymentMethod, setPaymentMethod] = useState('1');
 
   useEffect(() => {
     async function fetchPaymentMethods() {
@@ -69,7 +69,12 @@ const BillInfo = ({ totalCart, deliveryCost }) => {
 
 const mapStateToProps = state => ({
   totalCart: state.cart.totalCart,
-  deliveryCost: state.order.deliveryCost
+  deliveryCost: state.cart.deliveryCost,
+  paymentMethod: state.cart.paymentMethod
 });
 
-export default connect(mapStateToProps)(BillInfo);
+const mapDispatchToProps = dispatch => ({
+  setPaymentMethod: value => dispatch(setPaymentMethod(value))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(BillInfo);
