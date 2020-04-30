@@ -11,3 +11,22 @@ export function setUserAddress(addressData) {
     addressData 
   }
 }
+
+export function successLogin() {
+  return {
+    type: "SUCCESS_LOGIN"
+  }
+}
+
+export function logout() {
+  return {
+    type: "LOGOUT"
+  }
+}
+
+export function changeCurrency(currency) {
+  return {
+    type: "CHANGE_CURRENCY",
+    currency
+  }
+}

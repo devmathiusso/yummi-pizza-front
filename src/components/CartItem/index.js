@@ -4,7 +4,7 @@ import { Pane } from 'evergreen-ui';
 import QtyPane from './QtyPane';
 import ItemRow from './ItemRow';
 
-const CartItem = ({ index, item }) => {
+const CartItem = ({ index, item, removeQtyPanel }) => {
   const { pizza } = item;
 
   return (
@@ -15,10 +15,10 @@ const CartItem = ({ index, item }) => {
       width="100%"
       flexDirection="row"
     >
-      <QtyPane
+      {!removeQtyPanel && (<QtyPane
         itemIndex={index}
         itemQty={item.qty}
-      />
+      />)}
 
       <ItemRow
         pizza={pizza}

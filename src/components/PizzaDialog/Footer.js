@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Pane, Text, Button, AddIcon, RemoveIcon, TextInput } from 'evergreen-ui';
 
-const Footer = ({ pizzaPrice, addPizzaToCart }) => {
+const Footer = ({ pizzaPrice, addPizzaToCart, choosenCurrency }) => {
   const [qty, setQty] = useState(1);
 
   const addQty = () => setQty(qty + 1);
@@ -31,7 +32,7 @@ const Footer = ({ pizzaPrice, addPizzaToCart }) => {
         marginX={20} 
         width={150}
       >
-        <Text size={500}>{`$${(pizzaPrice * qty).toFixed(2)}`}</Text>
+        <Text size={500}>{`${choosenCurrency}${(pizzaPrice * qty).toFixed(2)}`}</Text>
       </Pane>
 
       <Pane display="flex" alignItems="center">
@@ -48,4 +49,8 @@ const Footer = ({ pizzaPrice, addPizzaToCart }) => {
   )
 };
 
-export default Footer;
+const mapStateToProps = state => ({
+  choosenCurrency: state.user.choosenCurrency
+});
+
+export default connect(mapStateToProps)(Footer);

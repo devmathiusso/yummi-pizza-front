@@ -44,7 +44,7 @@ const AddressContactInfo = ({ setUserContact, setUserAddress }) => {
           marginBottom={10}
         >
           All your orders will be attached to your email, 
-          so you can log in / register later to see your order history
+          so you can define your password and log in later to see your order history
         </Alert>
 
         <Pane width="100%">
