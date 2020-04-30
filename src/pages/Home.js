@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { changeIsCartOpen, toggleOrderSuccessDialog } from '../actions/cart';
 import { CornerDialog, Dialog, Pane } from 'evergreen-ui';
 
-import api from '../api';
+import pizzaService from '../services/pizza';
+
 import LoadingSpinner from '../components/LoadingSpinner';
 import PizzaCard from '../components/PizzaCard';
 import PizzaDialog from '../components/PizzaDialog';
@@ -19,12 +20,7 @@ const Home = ({
   const [shownSuccessDialog, setShownSuccessDialog] = useState(false);
 
   useEffect(() => {
-    async function fetchPizzas() {
-      const response = await api.get('/pizzas');
-      setPizzas(response.data.pizzas);
-    }
-
-    fetchPizzas();
+    pizzaService.fetchPizzas().then(response => setPizzas(response.data.pizzas));
   }, []);
 
   const renderPizzaList = () => {

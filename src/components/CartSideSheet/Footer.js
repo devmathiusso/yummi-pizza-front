@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { confirmOrder } from '../../actions/cart';
 import { Pane, Button, Text } from 'evergreen-ui';
 
-const Footer = ({ totalCart, deliveryCost, requiredData, confirmOrder }) => {
+const Footer = ({ totalCart, deliveryCost, requiredData, confirmOrder, choosenCurrency }) => {
   const [disabledButton, setDisabledButton] = useState(true);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Footer = ({ totalCart, deliveryCost, requiredData, confirmOrder }) => {
           onClick={() => confirmOrder()}
         >
           <Text color={disabledButton ? "muted" : "white"}>Confirm Order</Text>
-          <Text color={disabledButton ? "muted" : "white"} size={500}>{`$${(totalCart + deliveryCost).toFixed(2)}`}</Text>
+          <Text color={disabledButton ? "muted" : "white"} size={500}>{`${choosenCurrency}${(totalCart + deliveryCost).toFixed(2)}`}</Text>
         </Button>
       </Pane>
     </Pane>
@@ -49,7 +49,8 @@ const mapStateToProps = state => ({
     state.user.address.city,
     state.user.address.state,
     state.user.address.zipCode
-  ]
+  ],
+  choosenCurrency: state.user.choosenCurrency
 });
 
 const mapDispatchToProps = dispatch => ({

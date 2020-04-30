@@ -1,33 +1,74 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { changeIsCartOpen } from '../../actions/cart';
+import { changeCurrency } from '../../actions/user';
 import { 
   Pane, 
   Button, 
   Heading, 
   Icon, 
   Pill, 
-  Image
+  Image,
+  IconButton
 } from 'evergreen-ui';
+import { Redirect } from 'react-router-dom';
 import logo from '../../logo.svg';
 
+import Authenticated from './Authenticated';
 import CartSideSheet from '../CartSideSheet';
 
-const Layout = ({ children, cart, changeIsCartOpen }) => {
+const Layout = ({ children, cart, user, changeIsCartOpen, choosenCurrency, changeCurrency }) => {
+  const [redirectTo, setRedirectTo] = useState('');
+
+  useEffect(() => {
+    setRedirectTo('');
+  }, [redirectTo]);
+
+  if (redirectTo) {
+    return <Redirect to={redirectTo} />;
+  }
+
   const changeCartOpen = isCartOpen => {
     changeIsCartOpen(isCartOpen);
   }
 
   return (
     <>
-      <Pane display="flex" padding={16} background="tint2">
-        <Pane flex={1} alignItems="center" display="flex">
+      <Pane display="flex" 
+        padding={16} 
+        background="tint2"
+        justifyContent="space-between"
+      >
+        <Pane 
+          alignItems="center"
+          display="flex"
+        >
           <Heading size={600} alignItems="center" justifyContent="center" display="flex">
             <Pane width={32} marginRight={5}>
               <Image src={logo} width="100%" />
             </Pane>
             Yummi Pizza
           </Heading>
+
+          <Button marginLeft={10} appearance="minimal" intent="none" onClick={() => setRedirectTo('/')}>
+            Home
+          </Button>
+        </Pane>
+
+        <Pane alignItems="center" justifyContent="center" display="flex">
+          <IconButton 
+            appearance="minimal" 
+            icon="euro"
+            onClick={() => changeCurrency('£')}
+            intent={choosenCurrency === "£" ? 'success' : 'none'}         
+          />
+
+          <IconButton  
+            appearance="minimal" 
+            icon="dollar"
+            onClick={() => changeCurrency('US$')}
+            intent={choosenCurrency === "US$" ? 'success' : 'none'}                  
+          />
         </Pane>
 
         <Pane alignItems="center" justifyContent="center" display="flex">
@@ -47,9 +88,13 @@ const Layout = ({ children, cart, changeIsCartOpen }) => {
             </Pill>
           </Button>
 
-          <Button appearance="minimal" intent="primary">
-            Sign In
-          </Button>
+          {
+            user.id
+            ? (<Authenticated user={user} setRedirectTo={setRedirectTo} />)
+            : (<Button appearance="minimal" intent="none" onClick={() => setRedirectTo('/sign-in')}>
+                Sign In
+              </Button>)
+          }
         </Pane>
       </Pane>
 
@@ -67,11 +112,14 @@ const Layout = ({ children, cart, changeIsCartOpen }) => {
 }
 
 const mapStateToProps = (state) => ({
-  cart: state.cart
+  cart: state.cart,
+  user: state.user.user,
+  choosenCurrency: state.user.choosenCurrency
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  changeIsCartOpen: isCartOpen => dispatch(changeIsCartOpen(isCartOpen))
+  changeIsCartOpen: isCartOpen => dispatch(changeIsCartOpen(isCartOpen)),
+  changeCurrency: currency => dispatch(changeCurrency(currency)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);

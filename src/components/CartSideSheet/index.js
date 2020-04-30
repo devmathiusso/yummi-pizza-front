@@ -20,6 +20,7 @@ const CartSideSheet = ({ cartItems, isCartOpen, changeCartOpen }) => {
         item={item} 
         index={index}
         key={`cart-item-${index}`}
+        removeQtyPanel={false}
       />
     })
   }

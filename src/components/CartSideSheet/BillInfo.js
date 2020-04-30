@@ -3,14 +3,13 @@ import { connect } from 'react-redux';
 import { setPaymentMethod } from '../../actions/cart';
 import { Pane, Text, Strong, RadioGroup } from 'evergreen-ui';
 
-import api from '../../api';
+import paymentMethodService from '../../services/paymentMethod';
 
-const BillInfo = ({ totalCart, deliveryCost, paymentMethod, setPaymentMethod }) => {
+const BillInfo = ({ totalCart, deliveryCost, paymentMethod, setPaymentMethod, choosenCurrency }) => {
   const [paymentMethods, setPaymentMethods] = useState([]);
 
   useEffect(() => {
-    async function fetchPaymentMethods() {
-      const response = await api.get('/payment-methods');
+    paymentMethodService.fetchPaymentMethods().then(async response => {
       const methods = await response.data.payment_methods.map(method => {
         return {
           label: method.name,
@@ -19,9 +18,7 @@ const BillInfo = ({ totalCart, deliveryCost, paymentMethod, setPaymentMethod }) 
       });
 
       setPaymentMethods(methods);
-    }
-
-    fetchPaymentMethods();
+    });
   }, []);
 
   return (
@@ -35,9 +32,9 @@ const BillInfo = ({ totalCart, deliveryCost, paymentMethod, setPaymentMethod }) 
         padding={10}
         width="100%"
       >
-        <Text size={400} color="muted">Sub-Total: {`$${totalCart.toFixed(2)}`}</Text>
-        <Text size={400} color="muted">Delivery Cost: {`$${deliveryCost.toFixed(2)}`}</Text>
-        <Strong size={500}>Total: {`$${(totalCart + deliveryCost).toFixed(2)}`}</Strong>
+        <Text size={400} color="muted">Sub-Total: {`${choosenCurrency}${totalCart.toFixed(2)}`}</Text>
+        <Text size={400} color="muted">Delivery Cost: {`${choosenCurrency}${deliveryCost.toFixed(2)}`}</Text>
+        <Strong size={500}>Total: {`${choosenCurrency}${(totalCart + deliveryCost).toFixed(2)}`}</Strong>
       </Pane>
 
       <Pane 
@@ -70,7 +67,8 @@ const BillInfo = ({ totalCart, deliveryCost, paymentMethod, setPaymentMethod }) 
 const mapStateToProps = state => ({
   totalCart: state.cart.totalCart,
   deliveryCost: state.cart.deliveryCost,
-  paymentMethod: state.cart.paymentMethod
+  paymentMethod: state.cart.paymentMethod,
+  choosenCurrency: state.user.choosenCurrency
 });
 
 const mapDispatchToProps = dispatch => ({

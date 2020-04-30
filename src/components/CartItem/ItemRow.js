@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   Pane,
   Heading,
@@ -7,7 +8,7 @@ import {
   Badge
 } from 'evergreen-ui';
 
-const ItemRow = ({ pizza, itemQty, itemPreferences }) => {
+const ItemRow = ({ pizza, itemQty, itemPreferences, choosenCurrency }) => {
   const totalPrice = (itemQty * pizza.price).toFixed(2);
 
   return (
@@ -51,10 +52,14 @@ const ItemRow = ({ pizza, itemQty, itemPreferences }) => {
         alignItems="center"
         flex={1}
       >
-        <Text size={500}>{`$${totalPrice}`}</Text>
+        <Text size={500}>{`${choosenCurrency}${totalPrice}`}</Text>
       </Pane>
     </>
   )
 }
 
-export default ItemRow;
+const mapStateToProps = state => ({
+  choosenCurrency: state.user.choosenCurrency
+});
+
+export default connect(mapStateToProps)(ItemRow);

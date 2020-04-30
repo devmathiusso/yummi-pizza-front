@@ -1,7 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Card, Pane, Text, Heading, Badge } from 'evergreen-ui';
 
-const PizzaCard = ({ pizza, openPizzaDialog }) => {
+const PizzaCard = ({ pizza, openPizzaDialog, choosenCurrency }) => {
   pizza.ingredientsName = pizza.ingredients.map(({ ingredient }) => ingredient.name);
   pizza.picture = pizza.picture || 'https://i.imgur.com/qhpWIZG.png';
   pizza.badgeColor = pizza.category.name === 'Veggie' ? 'green' : 'neutral';
@@ -34,7 +35,7 @@ const PizzaCard = ({ pizza, openPizzaDialog }) => {
             : "No ingredients specified"
           }
         </Text>
-        <Text size={500} marginBottom={10}>${pizza.price.toFixed(2)}</Text>
+        <Text size={500} marginBottom={10}>{`${choosenCurrency}${pizza.price.toFixed(2)}`}</Text>
         <Badge isSolid color={pizza.badgeColor}>{pizza.category.name}</Badge>
       </Pane>
 
@@ -52,4 +53,8 @@ const PizzaCard = ({ pizza, openPizzaDialog }) => {
   )
 }
 
-export default PizzaCard;
+const mapStateToProps = state => ({
+  choosenCurrency: state.user.choosenCurrency
+});
+
+export default connect(mapStateToProps)(PizzaCard);
