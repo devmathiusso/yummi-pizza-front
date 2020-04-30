@@ -1,7 +1,10 @@
 const INITIAL_STATE = {
   items: [],
   isCartOpen: false,
-  totalCart: 0
+  totalCart: 0,
+  deliveryCost: 5,
+  paymentMethod: '1',
+  orderSuccessDialog: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -51,6 +54,23 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         totalCart: state.totalCart + (price * action.multiplicator)
+      }
+    case "SET_PAYMENT_METHOD":
+      return {
+        ...state,
+        paymentMethod: action.value
+      }
+
+    case "CONFIRM_ORDER":
+      return {
+        ...INITIAL_STATE,
+        orderSuccessDialog: true
+      };
+
+    case "TOGGLE_ORDER_SUCCESS_DIALOG":
+      return {
+        ...state,
+        orderSuccessDialog: !state.orderSuccessDialog
       }
 
     default:

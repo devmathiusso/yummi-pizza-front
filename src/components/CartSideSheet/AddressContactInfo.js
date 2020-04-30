@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { setUserContact, setUserAddress } from '../../actions/user';
 import { Pane, TextInputField, Heading, Alert } from 'evergreen-ui';
 
-const AddressContactInfo = () => {
+const AddressContactInfo = ({ setUserContact, setUserAddress }) => {
   // Contact
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -14,6 +16,16 @@ const AddressContactInfo = () => {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
+
+  const onChangeContactField = (field, value, fn) => {
+    fn(value);
+    setUserContact(field, value);
+  }
+
+  const onChangeAddressField = (field, value, fn) => {
+    fn(value);
+    setUserAddress(field, value);
+  }
 
   return (
     <>
@@ -42,7 +54,7 @@ const AddressContactInfo = () => {
             label="Full Name"
             isInvalid={!fullName}
             value={fullName}
-            onChange={e => setFullName(e.target.value)}
+            onChange={e => onChangeContactField('fullName', e.target.value, setFullName)}
             width="100%"
           />
 
@@ -57,7 +69,7 @@ const AddressContactInfo = () => {
               label="Email"
               isInvalid={!email}
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => onChangeContactField('email', e.target.value, setEmail)}
               width="60%"
             />
 
@@ -65,7 +77,7 @@ const AddressContactInfo = () => {
               label="Phone Number"
               isInvalid={!phoneNumber}
               value={phoneNumber}
-              onChange={e => setPhoneNumber(e.target.value)}
+              onChange={e => onChangeContactField('phoneNumber', e.target.value, setPhoneNumber)}
               width="37%"
             />
           </Pane>
@@ -85,23 +97,21 @@ const AddressContactInfo = () => {
               label="Street"
               isInvalid={!street}
               value={street}
-              onChange={e => setStreet(e.target.value)}
+              onChange={e => onChangeAddressField('street', e.target.value, setStreet)}
               width="43%"
             />
 
             <TextInputField
               label="Number"
-              isInvalid={!number}
               value={number}
-              onChange={e => setNumber(e.target.value)}
+              onChange={e => onChangeAddressField('number', e.target.value, setNumber)}
               width="14%"
             />
 
             <TextInputField
               label="Complement"
-              isInvalid={!complement}
               value={complement}
-              onChange={e => setComplement(e.target.value)}
+              onChange={e => onChangeAddressField('complement', e.target.value, setComplement)}
               width="37%"
               hint="e.g. apartment number"
             />
@@ -118,7 +128,7 @@ const AddressContactInfo = () => {
               label="City"
               isInvalid={!city}
               value={city}
-              onChange={e => setCity(e.target.value)}
+              onChange={e => onChangeAddressField('city', e.target.value, setCity)}
               width="32%"
             />
 
@@ -126,7 +136,7 @@ const AddressContactInfo = () => {
               label="State"
               isInvalid={!state}
               value={state}
-              onChange={e => setState(e.target.value)}
+              onChange={e => onChangeAddressField('state', e.target.value, setState)}
               width="25%"
             />
 
@@ -134,7 +144,7 @@ const AddressContactInfo = () => {
               label="Zip Code"
               isInvalid={!zipCode}
               value={zipCode}
-              onChange={e => setZipCode(e.target.value)}
+              onChange={e => onChangeAddressField('zipCode', e.target.value, setZipCode)}
               width="37%"
             />
           </Pane>
@@ -144,4 +154,11 @@ const AddressContactInfo = () => {
   );
 }
 
-export default AddressContactInfo;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  setUserAddress: (field, value) => dispatch(setUserAddress({ [field]: value })),
+  setUserContact: (field, value) => dispatch(setUserContact({ [field]: value })),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddressContactInfo);
