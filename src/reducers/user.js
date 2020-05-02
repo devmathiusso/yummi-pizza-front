@@ -3,7 +3,7 @@ let userAddressStorage = JSON.parse(localStorage.getItem('YummiPizza@userAddress
 let userChoosenCurrency = localStorage.getItem('YummiPizza@choosenCurrency');
 
 const INITIAL_STATE = {
-  choosenCurrency: userChoosenCurrency ? userChoosenCurrency : '£',
+  choosenCurrency: userChoosenCurrency ? userChoosenCurrency : '€',
   user: userStorage ? userStorage : {},
   address: userAddressStorage ? userAddressStorage : {}
 };

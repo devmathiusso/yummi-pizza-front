@@ -1,6 +1,6 @@
 let cartStorage = JSON.parse(localStorage.getItem('YummiPizza@cart'));
 
-const INITIAL_STATE = cartStorage ? cartStorage : {
+const BLANK_CART = {
   items: [],
   isCartOpen: false,
   totalCart: 0,
@@ -8,6 +8,8 @@ const INITIAL_STATE = cartStorage ? cartStorage : {
   paymentMethod: '1',
   orderSuccessDialog: false
 };
+
+const INITIAL_STATE = cartStorage ? cartStorage : BLANK_CART;
 
 export default function(state = INITIAL_STATE, action) {
   let newState;
@@ -92,7 +94,7 @@ export default function(state = INITIAL_STATE, action) {
 
     case "CONFIRM_ORDER":
       newState = {
-        ...INITIAL_STATE,
+        ...BLANK_CART,
         orderSuccessDialog: true
       };
 
