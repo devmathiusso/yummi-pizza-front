@@ -15,9 +15,18 @@ import { Redirect } from 'react-router-dom';
 import logo from '../../logo.svg';
 
 import Authenticated from './Authenticated';
+import LoadingContent from './LoadingContent';
 import CartSideSheet from '../CartSideSheet';
 
-const Layout = ({ children, cart, user, changeIsCartOpen, choosenCurrency, changeCurrency }) => {
+const Layout = ({ 
+  children, 
+  cart, 
+  user, 
+  changeIsCartOpen, 
+  choosenCurrency, 
+  changeCurrency,
+  isLoadingContent
+}) => {
   const [redirectTo, setRedirectTo] = useState('');
 
   useEffect(() => {
@@ -59,8 +68,8 @@ const Layout = ({ children, cart, user, changeIsCartOpen, choosenCurrency, chang
           <IconButton 
             appearance="minimal" 
             icon="euro"
-            onClick={() => changeCurrency('£')}
-            intent={choosenCurrency === "£" ? 'success' : 'none'}         
+            onClick={() => changeCurrency('€')}
+            intent={choosenCurrency === "€" ? 'success' : 'none'}         
           />
 
           <IconButton  
@@ -107,11 +116,14 @@ const Layout = ({ children, cart, user, changeIsCartOpen, choosenCurrency, chang
         isCartOpen={cart.isCartOpen}
         changeCartOpen={changeCartOpen}
       />
+
+      {isLoadingContent && <LoadingContent />}
     </>
   )
 }
 
 const mapStateToProps = (state) => ({
+  isLoadingContent: state.application.isLoadingContent,
   cart: state.cart,
   user: state.user.user,
   choosenCurrency: state.user.choosenCurrency

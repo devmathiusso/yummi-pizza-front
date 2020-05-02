@@ -11,6 +11,8 @@ const Footer = ({ totalCart, deliveryCost, requiredData, confirmOrder, choosenCu
     
     if (!missingFields.length) {
       setDisabledButton(false);
+    } else {
+      setDisabledButton(true);
     }
   }, [requiredData]);
 

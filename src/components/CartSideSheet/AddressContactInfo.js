@@ -8,6 +8,7 @@ const AddressContactInfo = ({ setUserContact, setUserAddress }) => {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
+  const [invalidEmail, setInvalidEmail] = useState(false);
 
   // Address
   const [street, setStreet] = useState('');
@@ -17,14 +18,44 @@ const AddressContactInfo = ({ setUserContact, setUserAddress }) => {
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
 
+  const validateEmailAddress = emailAddress => {
+    const re = /\S+@\S+\.\S+/;
+    
+    if (!re.test(emailAddress)) {
+      setInvalidEmail(true);
+      return false;
+    }
+
+    setInvalidEmail(false);
+    return true;
+  }
+
   const onChangeContactField = (field, value, fn) => {
     fn(value);
+
+    if (value === "" || (field === 'email' && !validateEmailAddress(value))) {
+      value = undefined;
+    }
+
     setUserContact(field, value);
   }
 
   const onChangeAddressField = (field, value, fn) => {
     fn(value);
+
+    if (value === "") {
+      value = undefined;
+    }
+
     setUserAddress(field, value);
+  }
+
+  const onChangePhoneNumber = e => {
+    const re = /^[0-9\b]+$/;
+    
+    if (e.target.value === '' || re.test(e.target.value)) {
+      onChangeContactField('phoneNumber', e.target.value, setPhoneNumber);
+    }
   }
 
   return (
@@ -67,7 +98,7 @@ const AddressContactInfo = ({ setUserContact, setUserAddress }) => {
           >
             <TextInputField
               label="Email"
-              isInvalid={!email}
+              isInvalid={(!email || invalidEmail)}
               value={email}
               onChange={e => onChangeContactField('email', e.target.value, setEmail)}
               width="60%"
@@ -77,7 +108,7 @@ const AddressContactInfo = ({ setUserContact, setUserAddress }) => {
               label="Phone Number"
               isInvalid={!phoneNumber}
               value={phoneNumber}
-              onChange={e => onChangeContactField('phoneNumber', e.target.value, setPhoneNumber)}
+              onChange={e => onChangePhoneNumber(e)}
               width="37%"
             />
           </Pane>
