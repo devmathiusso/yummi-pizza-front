@@ -1,3 +1,8 @@
+# Live Demo
+
+https://yummi-front.herokuapp.com
+> it might take a while to load due to Heroku free plan policy listed at https://devcenter.heroku.com/articles/free-dyno-hours#dyno-sleeping
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
